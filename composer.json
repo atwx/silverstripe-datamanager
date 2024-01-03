@@ -1,6 +1,6 @@
 {
-    "name": "silverstripe-module/skeleton",
-    "description": "A skeleton for Silverstripe CMS modules.",
+    "name": "atwx/silverstripe-datamanager",
+    "description": "A frontend datamanager for Silverstripe framework",
     "type": "silverstripe-vendormodule",
     "keywords": [
         "silverstripe",
