@@ -12,7 +12,7 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\View\ArrayData;
 
-class ManageableDataObject extends DataObject
+class DataManagerObject extends DataObject
 {
     private static $table_name = "ManageableDataObject";
 

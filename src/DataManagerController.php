@@ -17,7 +17,7 @@ use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\PaginatedList;
 use SilverStripe\View\ArrayData;
 
-class ManageController extends BaseController
+class DataManagerController extends Controller
 {
     private static $allowed_actions = array(
         "EditForm",
@@ -30,7 +30,7 @@ class ManageController extends BaseController
 
     private static $managed_model = null;
 
-    private static $title = 'ManageController';
+    private static $title = 'DataManagerController';
 
     public function getBaseUrl() {
         return self::config()->get('url_segment');
@@ -49,8 +49,7 @@ class ManageController extends BaseController
 
     public function index(HTTPRequest $request)
     {
-        return [
-        ];
+        return $this->renderWith([self::class, 'Page']);
     }
 
     public function Actions()
@@ -182,7 +181,7 @@ class ManageController extends BaseController
         $class = $this->getManagedModel();
         if ($id) {
             $item = $class::get()->byId($id);
-            return $this->renderWith([ManageController::class . '_view', BaseController::class], array(
+            return $this->renderWith([DataManagerController::class . '_view', 'Page'], array(
 //                "Content" => DBField::create_field("HTMLText", "<h1>Anzeigen</h1>"),
                 "Content" => $item,
                 "Title" => $item->Title(),
@@ -199,7 +198,7 @@ class ManageController extends BaseController
             $item = $class::get()->byId($id);
             $form->loadDataFrom($item);
         }
-        return $this->renderWith([ManageController::class . '_edit', BaseController::class], array(
+        return $this->renderWith([DataManagerController::class . '_edit', 'Page'], array(
 //            "Content" => DBField::create_field("HTMLText", "<h1>Bearbeiten</h1>"),
             "Form" => $form,
             "Title" => singleton($class)->singular_name() . " bearbeiten",
@@ -229,7 +228,7 @@ class ManageController extends BaseController
         if ($this->getRequest()->getVar("Title")) {
             $title = $this->getRequest()->getVar("Title");
         }
-        return $this->renderWith([ManageController::class . '_edit', BaseController::class], array(
+        return $this->renderWith([DataManagerController::class . '_edit', 'Page'], array(
             "Title" => $title,
             "Form" => $form
         ));

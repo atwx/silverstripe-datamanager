@@ -9,11 +9,11 @@
     <title>$Title - $SiteConfig.Title</title>
     $Vite.HeaderTags.RAW
 <%--  TODO: Include compiled uikit --%>
-    <link rel="stylesheet" href="http://localhost:3000/app/client/src/scss/main.scss">
+<%--    <link rel="stylesheet" href="http://localhost:3000/app/client/src/scss/main.scss">--%>
 </head>
 <body>
-<% include Header %>
-    <% include Sidebar %>
+<% include Atwx\\SilverstripeDataManager\\Includes\\Header %>
+    <% include Atwx\\SilverstripeDataManager\\Includes\\Sidebar %>
     <main class="main">
         $Layout
     </main>

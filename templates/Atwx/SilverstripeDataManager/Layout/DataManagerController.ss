@@ -1,4 +1,4 @@
-<% include Heading Title=$Title, Description=$Description, Actions=$Actions%>
+<% include Atwx\\SilverstripeDataManager\\Includes\\Heading Title=$Title, Description=$Description, Actions=$Actions%>
 $FilterForm
 <table class="uk-table uk-table-striped">
     <thead>
