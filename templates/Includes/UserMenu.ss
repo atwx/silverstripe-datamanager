@@ -1,0 +1,25 @@
+<div class="user-menu" x-data="{ open: false }" @click.outside="open = false">
+    <img class="user-menu__avatar" src="https://s.gravatar.com/avatar/0e94d9d2f4c98aa745a1c33aa77446d7a3259a267418eddaaff3422affd5a7f2?s=80&r=g" alt="Adam Laki">
+    <div class="user-menu__caption">
+        <span class="user-menu__role">Administrator</span>
+        <span class="user-menu__display-name">info@adamlaki.com</span>
+    </div>
+    <button class="user-menu__toggle" :aria-expanded="open" @click="open = ! open">
+        Chevron-Icon
+    </button>
+    <ul class="context-menu context-menu--inline-end" :data-state="open ? 'open' : 'closed'">
+        <li>
+            <span class="context-menu__item">
+                Theme
+                {% include 'partial/theme-switcher.html' %}
+            </span>
+        </li>
+        {% for item in user %}
+            <li>
+                <a href="{{ item.url }}" {{ helpers.getLinkActiveState(item.url, page.url) | safe }} class="context-menu__item">
+                    {{ item.title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

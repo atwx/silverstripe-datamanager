@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <title>$Title - $SiteConfig.Title</title>
     $Vite.HeaderTags.RAW
-<%--    TODO --%>
+<%--  TODO: Include compiled uikit --%>
     <link rel="stylesheet" href="http://localhost:3000/app/client/src/scss/main.scss">
 </head>
 <body>
