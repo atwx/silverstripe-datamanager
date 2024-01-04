@@ -34,3 +34,4 @@ $FilterForm
     <% end_if %>
     </tbody>
 </table>
+<% include Atwx\SilverstripeDataManager\Includes\Pagination ItemList=$Items %>
