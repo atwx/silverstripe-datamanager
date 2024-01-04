@@ -1,0 +1,20 @@
+---
+Name: uikitforms
+After: framework/_config/routes#coreroutes
+---
+SilverStripe\Forms\Form:
+  default_classes:
+    - 'uk-form-stacked'
+SilverStripe\Forms\TextField:
+  default_classes:
+    - 'uk-input'
+SilverStripe\Forms\TextareaField:
+  default_classes:
+    - 'uk-textarea'
+SilverStripe\Forms\DropdownField:
+  default_classes:
+    - 'uk-select'
+SilverStripe\Forms\FormAction:
+  default_classes:
+    - 'uk-button'
+    - 'uk-button-primary'
