@@ -7,7 +7,7 @@
 	<p id="{$FormName}_error" class="message $MessageType" style="display: none"></p>
 	<% end_if %>
 
-	<fieldset class="uk-fieldset	">
+	<fieldset class="uk-fieldset">
 		<% if $Legend %><legend>$Legend</legend><% end_if %>
 		<% loop $Fields %>
 			$FieldHolder

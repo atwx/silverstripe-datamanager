@@ -1,5 +1,9 @@
-<div class="fieldholder-small<% if $extraClass %> $extraClass<% end_if %>" id="$HolderID.ATT">
-	<% if $Title %><label class="fieldholder-small-label" <% if $ID %>for="$ID"<% end_if %>>$Title</label><% end_if %>
-	$Field
-	<% if $RightTitle %><label class="right fieldholder-small-label" <% if $ID %>for="$ID"<% end_if %>>$RightTitle</label><% end_if %>
+<div id="$HolderID">
+	<% if $Title %><label class="uk-form-label" for="$ID">$Title</label><% end_if %>
+	<div class="uk-form-controls">
+		$Field
+	</div>
+	<% if $RightTitle %><label class="right" for="$ID">$RightTitle</label><% end_if %>
+	<% if $Message %><span class="message $MessageType">$Message</span><% end_if %>
+	<% if $Description %><span class="description">$Description</span><% end_if %>
 </div>

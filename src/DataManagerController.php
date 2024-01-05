@@ -32,11 +32,13 @@ class DataManagerController extends Controller
 
     private static $title = 'DataManagerController';
 
-    public function getBaseUrl() {
+    public function getBaseUrl()
+    {
         return self::config()->get('url_segment');
     }
 
-    public function Link($action = null) {
+    public function Link($action = null)
+    {
         $url = $this->getBaseUrl();
         if ($url) {
             $link = Controller::join_links($url, $action);
@@ -119,9 +121,6 @@ class DataManagerController extends Controller
     public function FilterForm()
     {
         $model = singleton($this->ManagedModel);
-        if (!$model->hasMethod('getFilterFields')) {
-            return null;
-        }
         $fields = $model->getFilterFields();
         $actions = FieldList::create(
             FormAction::create("search", "Filtern")
@@ -131,11 +130,12 @@ class DataManagerController extends Controller
             ->addExtraClass("form--filter")
             ->setFormAction($this->Link())
             ->setFormMethod("get");
+        $form->setTemplate('Atwx/SilverstripeDataManager/Includes/FilterForm');
         $form->loadDataFrom($this->getRequest()->getVars());
         return $form;
     }
 
-        public function EditForm()
+    public function EditForm()
     {
         $request = $this->getRequest();
         $object_class = "";
@@ -292,6 +292,11 @@ class DataManagerController extends Controller
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="' . urlencode($fileName) . '"');
         $writer->save('php://output');
+    }
+
+    public function getFilterIsSet()
+    {
+        return isset($_GET['Query']);
     }
 
 }
