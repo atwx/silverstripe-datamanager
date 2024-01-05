@@ -31,6 +31,11 @@ class DataManagerObject extends DataObject
         return $this->exportFields(); // TODO: Add export fields
     }
 
+    public function getFilterFields()
+    {
+        return null;
+    }
+
     public function filter($query, $request)
     {
         return $query;
