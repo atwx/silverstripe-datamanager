@@ -134,6 +134,9 @@ class DataManagerController extends Controller
     {
         $model = singleton($this->ManagedModel);
         $fields = $model->getFilterFields();
+        if (!$fields) {
+            return null;
+        }
         $actions = FieldList::create(
             FormAction::create("search", "Filtern")
                 ->addExtraClass("button--secondary")
