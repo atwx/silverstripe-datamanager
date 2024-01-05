@@ -29,7 +29,7 @@ $FilterForm
                     <% end_loop %>
                     <td>
                         <a href="$Top.Link("edit")/$ID"
-                           class="uk-button uk-button-small uk-button-primary">Bearbeiten</a>
+                           class="uk-button uk-button-small uk-button-primary" uk-icon="icon: heart">Bearbeiten</a>
                     </td>
                     <td>
                         <a href="$Top.Link("delete")/$ID?BackURL=$Top.Link" class="button small hollow delete"

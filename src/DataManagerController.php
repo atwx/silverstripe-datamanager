@@ -6,6 +6,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
@@ -32,9 +33,20 @@ class DataManagerController extends Controller
 
     private static $title = 'DataManagerController';
 
+    private static $logo = null;
+
     public function getBaseUrl()
     {
         return self::config()->get('url_segment');
+    }
+
+    public function getLogo()
+    {
+        $logo = self::config()->get('logo');
+        if($logo) {
+            $logoUrl = ModuleResourceLoader::resourceURL($logo);
+            return $logoUrl;
+        }
     }
 
     public function Link($action = null)
