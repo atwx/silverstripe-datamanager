@@ -10,14 +10,38 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBHTMLText;
+use SilverStripe\Security\Permission;
 use SilverStripe\View\ArrayData;
 
 class DataManagerObject extends DataObject
 {
     private static $table_name = "ManageableDataObject";
 
+    public function canView($member = null)
+    {
+        return true;
+    }
+
+    public function canEdit($member = null)
+    {
+        return Permission::check("ADMIN", "any", $member);
+    }
+
+    public function canDelete($member = null)
+    {
+        return Permission::check("ADMIN", "any", $member);
+    }
+
+    public function canCreate($member = null, $context = [])
+    {
+        return Permission::check("ADMIN", "any", $member);
+    }
+
     public function Title()
     {
+        if($this->dbObject("Title")->exists()) {
+            return $this->dbObject("Title")->getValue();
+        }
         return "[$this->ClassName: $this->ID]";
     }
 
