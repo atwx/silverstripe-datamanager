@@ -18,3 +18,6 @@ SilverStripe\Forms\FormAction:
   default_classes:
     - 'uk-button'
     - 'uk-button-primary'
+SilverStripe\Forms\CheckboxField:
+  default_classes:
+    - 'uk-checkbox'
