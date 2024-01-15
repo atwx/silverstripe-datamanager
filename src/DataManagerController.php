@@ -154,6 +154,7 @@ class DataManagerController extends Controller implements PermissionProvider
         $actions->push(ArrayData::create([
             "Title" => "Neu",
             "Link" => $this->Link("add"),
+            "AccessKey" => "n",
         ]));
         return $actions;
     }
