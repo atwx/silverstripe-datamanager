@@ -1,6 +1,7 @@
 <?php
 namespace Atwx\SilverstripeDataManager;
 
+use SilverStripe\Core\Extension;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\GridField\GridField;
@@ -13,46 +14,44 @@ use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Security\Permission;
 use SilverStripe\View\ArrayData;
 
-class DataManagerObject extends DataObject
+class DataManagerExtension extends Extension
 {
-    private static $table_name = "ManageableDataObject";
-
-    public function canView($member = null)
-    {
-        return true;
-    }
-
-    public function canEdit($member = null)
-    {
-        return Permission::check("ADMIN", "any", $member);
-    }
-
-    public function canDelete($member = null)
-    {
-        return Permission::check("ADMIN", "any", $member);
-    }
-
-    public function canCreate($member = null, $context = [])
-    {
-        return Permission::check("ADMIN", "any", $member);
-    }
+//    public function canView($member = null)
+//    {
+//        return true;
+//    }
+//
+//    public function canEdit($member = null)
+//    {
+//        return Permission::check("ADMIN", "any", $member);
+//    }
+//
+//    public function canDelete($member = null)
+//    {
+//        return Permission::check("ADMIN", "any", $member);
+//    }
+//
+//    public function canCreate($member = null, $context = [])
+//    {
+//        return Permission::check("ADMIN", "any", $member);
+//    }
 
     public function Title()
     {
-        if($this->dbObject("Title")->exists()) {
-            return $this->dbObject("Title")->getValue();
+        if($this->owner->dbObject("Title")->exists()) {
+            return $this->owner->dbObject("Title")->getValue();
         }
-        return "[$this->ClassName: $this->ID]";
+        return "[$this->owner->ClassName: $this->ID]";
     }
 
     public function getManagementFields()
     {
-        return $this->summaryFields();
+        return $this->owner->summaryFields();
     }
 
     public function getExportFields()
     {
-        return $this->exportFields(); // TODO: Add export fields
+        return $this->owner->exportFields(); // TODO: Add export fields
     }
 
     public function getFilterFields()
@@ -68,7 +67,7 @@ class DataManagerObject extends DataObject
     public function getManagementData()
     {
         $data = new ArrayList();
-        foreach ($this->getManagementFields() as $name => $title) {
+        foreach ($this->owner->getManagementFields() as $name => $title) {
             $data->push(ArrayData::create([
                 "Value" => $this->getColumnContent($name), // TODO: Casting
             ]));
@@ -79,8 +78,8 @@ class DataManagerObject extends DataObject
     public function getExportData()
     {
         $data = [];
-        foreach ($this->getExportFields() as $name => $title) {
-            $data[] = $this->getColumnContent($name);
+        foreach ($this->owner->getExportFields() as $name => $title) {
+            $data[] = $this->owner->getColumnContent($name);
         }
         return $data;
     }
@@ -110,11 +109,11 @@ class DataManagerObject extends DataObject
 
     function EditForm($controller, $name, $action)
     {
-        if ($this->hasMethod('getCustomEditForm')) {
-            return $this->getCustomEditForm($controller, $name, $action);
+        if ($this->owner->hasMethod('getCustomEditForm')) {
+            return $this->owner->getCustomEditForm($controller, $name, $action);
         }
 
-        $fields = $this->EditFormFields();
+        $fields = $this->owner->EditFormFields();
         $actions = new FieldList(
             $action
         );
@@ -131,7 +130,7 @@ class DataManagerObject extends DataObject
 
     public function EditFormFields()
     {
-        $fields = $this->scaffoldFormFields();
+        $fields = $this->owner->scaffoldFormFields();
         $fields->push(new HiddenField("ID", "ID"));
 
         return $fields;
@@ -150,6 +149,6 @@ class DataManagerObject extends DataObject
      */
     public function forTemplate()
     {
-        return $this->renderWith([$this->ClassName, self::class]);
+        return $this->owner->renderWith([$this->owner->ClassName, self::class]);
     }
 }
