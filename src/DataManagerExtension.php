@@ -44,30 +44,18 @@ class DataManagerExtension extends Extension
         return "[$this->owner->ClassName: $this->ID]";
     }
 
-    public function getManagementFields()
+    public function getDataManagerFields()
     {
+        if($this->owner->hasMethod('dataManagerFields')) {
+            return $this->owner->dataManagerFields();
+        }
         return $this->owner->summaryFields();
     }
 
-    public function getExportFields()
-    {
-        return $this->owner->exportFields(); // TODO: Add export fields
-    }
-
-    public function getFilterFields()
-    {
-        return null;
-    }
-
-    public function filter($query, $request)
-    {
-        return $query;
-    }
-
-    public function getManagementData()
+    public function getDataManagerData()
     {
         $data = new ArrayList();
-        foreach ($this->owner->getManagementFields() as $name => $title) {
+        foreach ($this->owner->getDataManagerFields() as $name => $title) {
             $data->push(ArrayData::create([
                 "Value" => $this->getColumnContent($name), // TODO: Casting
             ]));
@@ -75,23 +63,6 @@ class DataManagerExtension extends Extension
         return $data;
     }
 
-    public function getExportData()
-    {
-        $data = [];
-        foreach ($this->owner->getExportFields() as $name => $title) {
-            $data[] = $this->owner->getColumnContent($name);
-        }
-        return $data;
-    }
-
-    /**
-     * HTML for the column, content of the <td> element.
-     *
-     * @param GridField $gridField
-     * @param DataObject $record Record displayed in this row
-     * @param string $columnName
-     * @return string HTML for the column. Return NULL to skip.
-     */
     public function getColumnContent($fieldName)
     {
         $record = $this->owner;
@@ -107,40 +78,23 @@ class DataManagerExtension extends Extension
         return $record->$fieldName;
     }
 
-    function EditForm($controller, $name, $action)
+    public function getExportFields()
     {
-        if ($this->owner->hasMethod('getCustomEditForm')) {
-            return $this->owner->getCustomEditForm($controller, $name, $action);
+        return $this->owner->exportFields(); // TODO: Add export fields
+    }
+
+    public function getDataManagerFilterFields()
+    {
+        return null;
+    }
+
+    public function getExportData()
+    {
+        $data = [];
+        foreach ($this->owner->getExportFields() as $name => $title) {
+            $data[] = $this->owner->getColumnContent($name);
         }
-
-        $fields = $this->owner->EditFormFields();
-        $actions = new FieldList(
-            $action
-        );
-        $required = $this->getValidator();
-        $form = new Form(
-            $controller, // the Controller to render this form on
-            $name, // name of the method that returns this form on the controller
-            $fields, // list of FormField instances
-            $actions, // list of FormAction instances
-            $required // optional use of RequiredFields object
-        );
-        return $form;
-    }
-
-    public function EditFormFields()
-    {
-        $fields = $this->owner->scaffoldFormFields();
-        $fields->push(new HiddenField("ID", "ID"));
-
-        return $fields;
-    }
-
-    public function getValidator()
-    {
-        $required = new RequiredFields(array(
-        ));
-        return $required;
+        return $data;
     }
 
     /**

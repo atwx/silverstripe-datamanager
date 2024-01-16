@@ -190,7 +190,9 @@ class DataManagerController extends Controller implements PermissionProvider
     {
         $Model = self::config()->get('managed_model');
         $query = DataObject::get($Model);
-        $query = singleton($Model)->filter($query, $this->getRequest());
+        if (singleton($Model)->hasMethod("buildDataManagerFilter")) {
+            $query = singleton($Model)->buildDataManagerFilter($query, $this->getRequest());
+        }
         return $query;
     }
 
@@ -200,9 +202,9 @@ class DataManagerController extends Controller implements PermissionProvider
         return $list;
     }
 
-    public function getManagementFields()
+    public function getDataManagerFields()
     {
-        $fieldsList = singleton($this->getManagedModel())->getManagementFields();
+        $fieldsList = singleton($this->getManagedModel())->getDataManagerFields();
         $fields = ArrayList::create();
         foreach ($fieldsList as $name => $title) {
             $fields->push(ArrayData::create([
@@ -216,7 +218,7 @@ class DataManagerController extends Controller implements PermissionProvider
     public function FilterForm()
     {
         $model = singleton($this->ManagedModel);
-        $fields = $model->getFilterFields();
+        $fields = $model->getDataManagerFilterFields();
         if (!$fields) {
             return null;
         }
@@ -253,18 +255,25 @@ class DataManagerController extends Controller implements PermissionProvider
             $class = $this->getManagedModel();
         }
 
-        if ($id) {
+        if($id) {
             $item = $class::get()->byId($id);
-            $form = $item->EditForm($this, "EditForm", [
-                new FormAction("save", "Speichern"),
-                new LiteralField('Cancel', '<a href="javascript:history.back();" class="uk-button">Abbrechen</a>'),
-            ]);
         } else {
-            $form = singleton($class)->EditForm($this, "EditForm", [
-                new FormAction("save", "Speichern"),
-                new LiteralField('Cancel', '<a href="javascript:history.back();" class="uk-button">Abbrechen</a>'),
-            ]);
+            $item = singleton($class);
         }
+
+        if ($item->hasMethod("dataManagerFormFields")) {
+            $fields = $item->dataManagerFormFields();
+            $fields->push(new HiddenField("ID", "ID"));
+        } else {
+            $fields = $item->scaffoldFormFields();
+        }
+
+        $form = Form::create($this, "EditForm", $fields, new FieldList([
+            new FormAction("save", "Speichern"),
+            new LiteralField('Cancel', '<a href="javascript:history.back();" class="uk-button">Abbrechen</a>'),
+        ]));
+
+        // TODO: Validator
 
         if ($object_class) {
             $form->Fields()->push(new HiddenField("EditClass", "EditClass", $object_class));

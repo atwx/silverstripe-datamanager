@@ -20,7 +20,7 @@ $FilterForm
         <% if $Items.Count > 0 %>
             <% loop $Items %>
                 <tr>
-                    <% loop $ManagementData %>
+                    <% loop $DataManagerData %>
                         <% if $IsFirst %>
                             <td><a href="$Top.Link("view")/$Up.ID">$Value</a></td>
                         <% else %>
