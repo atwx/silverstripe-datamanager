@@ -83,11 +83,6 @@ class DataManagerExtension extends Extension
         return $this->owner->exportFields(); // TODO: Add export fields
     }
 
-    public function getDataManagerFilterFields()
-    {
-        return null;
-    }
-
     public function getExportData()
     {
         $data = [];
