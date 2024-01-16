@@ -218,10 +218,10 @@ class DataManagerController extends Controller implements PermissionProvider
     public function FilterForm()
     {
         $model = singleton($this->ManagedModel);
-        $fields = $model->getDataManagerFilterFields();
-        if (!$fields) {
+        if (!$model->hasMethod("getDataManagerFilterFields")) {
             return null;
         }
+        $fields = $model->getDataManagerFilterFields();
         $actions = FieldList::create(
             FormAction::create("search", "Filtern")
                 ->addExtraClass("button--secondary")
