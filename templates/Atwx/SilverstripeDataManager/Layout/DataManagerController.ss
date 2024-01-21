@@ -11,7 +11,7 @@ $FilterForm
     <table class="uk-table uk-table-striped">
         <thead>
         <tr>
-            <% loop $ManagementFields %>
+            <% loop $DataManagerFields %>
                 <th>$Title</th>
             <% end_loop %>
         </tr>
