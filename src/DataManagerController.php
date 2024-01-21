@@ -47,6 +47,11 @@ class DataManagerController extends Controller implements PermissionProvider
     public function init()
     {
         parent::init();
+        $this->templates['index'] = [
+            get_class($this),
+            DataManagerController::class,
+            'Page'
+        ];
         $this->templates['view'] = [
             get_class($this) . '_view',
             DataManagerController::class . '_view',
@@ -54,6 +59,13 @@ class DataManagerController extends Controller implements PermissionProvider
         ];
         $this->templates['edit'] = [
             get_class($this) . '_edit',
+            DataManagerController::class . '_edit',
+            'Page'
+        ];
+        $this->templates['add'] = [
+            get_class($this) . '_add',
+            get_class($this) . '_edit',
+            DataManagerController::class . '_add',
             DataManagerController::class . '_edit',
             'Page'
         ];
@@ -145,7 +157,9 @@ class DataManagerController extends Controller implements PermissionProvider
 
     public function index(HTTPRequest $request)
     {
-        return $this->renderWith([self::class, 'Page']);
+        return [
+
+        ];
     }
 
     public function Actions()
@@ -266,6 +280,7 @@ class DataManagerController extends Controller implements PermissionProvider
             $fields->push(new HiddenField("ID", "ID"));
         } else {
             $fields = $item->scaffoldFormFields();
+            $fields->push(new HiddenField("ID", "ID"));
         }
 
         $form = Form::create($this, "EditForm", $fields, new FieldList([
@@ -335,10 +350,10 @@ class DataManagerController extends Controller implements PermissionProvider
         if ($this->getRequest()->getVar("Title")) {
             $title = $this->getRequest()->getVar("Title");
         }
-        return $this->renderWith([DataManagerController::class . '_edit', 'Page'], array(
+        return [
             "Title" => $title,
-            "Form" => $form
-        ));
+            "Form" => $form,
+        ];
     }
 
     public function save($data, $form)
