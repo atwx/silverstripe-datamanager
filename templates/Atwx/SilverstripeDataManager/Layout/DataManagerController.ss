@@ -1,4 +1,5 @@
 <% include Atwx\\SilverstripeDataManager\\Includes\\Heading Title=$Title, Description=$Description, Actions=$Actions%>
+<% include Atwx\\SilverstripeDataManager\\Includes\\SessionMessage %>
 $FilterForm
 <% if $FilterIsSet %>
     <p>

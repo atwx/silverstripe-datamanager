@@ -421,4 +421,33 @@ class DataManagerController extends Controller implements PermissionProvider
         return isset($_GET['Query']);
     }
 
+    public function hasSessionMessage()
+    {
+        $session = $this->getRequest()->getSession();
+        return $session->get("DataManagerMessage") ? true : false;
+    }
+
+    public function setSessionMessage($message, $type)
+    {
+        $session = $this->getRequest()->getSession();
+        $session->set("DataManagerMessage", $message);
+        $session->set("DataManagerMessageType", $type);
+    }
+
+    public function getSessionMessage()
+    {
+        $session = $this->getRequest()->getSession();
+        $message = $session->get("DataManagerMessage");
+        $session->clear("DataManagerMessage");
+        return $message;
+    }
+
+    public function getSessionMessageType()
+    {
+        $session = $this->getRequest()->getSession();
+        $type = $session->get("DataManagerMessageType");
+        $session->clear("DataManagerMessageType");
+        return $type;
+    }
+
 }

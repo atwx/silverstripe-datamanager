@@ -38,10 +38,10 @@ class DataManagerExtension extends Extension
 
     public function Title()
     {
-        if($this->owner->dbObject("Title")->exists()) {
+        if($this->owner->dbObject("Title")) {
             return $this->owner->dbObject("Title")->getValue();
         }
-        return "[$this->owner->ClassName: $this->ID]";
+        return "[$this->owner->ClassName: $this->owner->ID]";
     }
 
     public function getDataManagerFields()
