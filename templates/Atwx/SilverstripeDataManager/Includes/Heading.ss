@@ -6,8 +6,9 @@
     <% if $Actions %>
         <div>
             <% loop $Actions %>
-                <a class="uk-button-primary uk-button"
+                <a class="uk-button uk-button-small<% if $Primary %> uk-button-primary<% end_if %>"
                    href="$Link"
+                   <% if $Target %>target="$Target"<% end_if %>
                    <% if $AccessKey %>accesskey="n"<% end_if %>
                 >
                     $Title

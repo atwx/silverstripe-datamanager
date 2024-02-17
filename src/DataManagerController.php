@@ -167,8 +167,14 @@ class DataManagerController extends Controller implements PermissionProvider
         $actions = ArrayList::create();
         $actions->push(ArrayData::create([
             "Title" => "Neu",
+            "Primary" => true,
             "Link" => $this->Link("add"),
             "AccessKey" => "n",
+        ]));
+        $actions->push(ArrayData::create([
+            "Title" => "Export",
+            "Target" => "_blank",
+            "Link" => $this->Link("export") . "?" . $this->CurrentQuery(),
         ]));
         return $actions;
     }
@@ -383,6 +389,11 @@ class DataManagerController extends Controller implements PermissionProvider
         }
     }
 
+    public function getExportFields()
+    {
+        return singleton($this->getManagedModel())->getDataManagerExportFields();
+    }
+
     public function export(HTTPRequest $request)
     {
         $spreadsheet = new Spreadsheet();
@@ -391,7 +402,7 @@ class DataManagerController extends Controller implements PermissionProvider
 
         $items = $this->getItems();
 
-        $fields = singleton($this->getManagedModel())->getExportFields();
+        $fields = $this->getExportFields();
 
         $col = "A";
         foreach ($fields as $name => $title) {
@@ -401,14 +412,17 @@ class DataManagerController extends Controller implements PermissionProvider
 
         foreach ($items as $item) {
             $col = "A";
-            foreach ($item->getExportData() as $data) {
+            foreach ($item->getDataManagerExportData() as $data) {
                 $sheet->setCellValue($col . $row, $data);
                 $col++;
             }
             $row++;
         }
 
-        $fileName = "export-" . date("Y-m-d") . ".xlsx";
+        $class = $this->getManagedModel();
+        $className = strtolower(singleton($class)->plural_name());
+
+        $fileName = "export-$className-" . date("Y-m-d") . ".xlsx";
 
         $writer = new Xlsx($spreadsheet);
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

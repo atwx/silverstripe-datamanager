@@ -78,15 +78,18 @@ class DataManagerExtension extends Extension
         return $record->$fieldName;
     }
 
-    public function getExportFields()
+    public function getDataManagerExportFields()
     {
-        return $this->owner->exportFields(); // TODO: Add export fields
+        if($this->owner->hasMethod('dataManagerExportFields')) {
+            return $this->owner->dataManagerExportFields();
+        }
+        return $this->getDataManagerFields();
     }
 
-    public function getExportData()
+    public function getDataManagerExportData()
     {
         $data = [];
-        foreach ($this->owner->getExportFields() as $name => $title) {
+        foreach ($this->owner->getDataManagerExportFields() as $name => $title) {
             $data[] = $this->owner->getColumnContent($name);
         }
         return $data;

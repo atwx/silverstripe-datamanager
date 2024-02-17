@@ -31,14 +31,19 @@ $FilterForm
                     <% if $CanEdit %>
                         <td>
                             <a href="$Top.Link("edit")/$ID"
-                               class="uk-button uk-button-small uk-button-primary" uk-icon="icon: heart">Bearbeiten</a>
+                               class="uk-icon-button"
+                               title="Bearbeiten"
+                               uk-icon="icon: pencil"></a>
                         </td>
                     <% end_if %>
                     <% if $CanDelete %>
-                    <td>
-                        <a href="$Top.Link("delete")/$ID?BackURL=$Top.Link" class="button small hollow delete"
-                           onclick="return confirm('Sind Sie sicher?')">Löschen</a>
-                    </td>
+                        <td>
+                            <a href="$Top.Link("delete")/$ID?BackURL=$Top.Link"
+                               class="uk-icon-button"
+                               title="Löschen"
+                               onclick="return confirm('Sind Sie sicher?')"
+                               uk-icon="icon: trash"></a>
+                        </td>
                     <% end_if %>
                 </tr>
             <% end_loop %>
