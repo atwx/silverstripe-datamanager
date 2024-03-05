@@ -478,7 +478,7 @@ class DataManagerController extends Controller implements PermissionProvider
 
     public function getFilterIsSet()
     {
-        return isset($_GET['Query']);
+        return $this->CurrentQuery();
     }
 
     public function hasSessionMessage()
