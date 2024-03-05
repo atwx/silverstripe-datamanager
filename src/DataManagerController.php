@@ -19,6 +19,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
+use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
@@ -36,6 +37,7 @@ class DataManagerController extends Controller implements PermissionProvider
         "view",
         "delete",
         "export",
+        "duplicate",
     );
 
     private static $managed_model = null;
@@ -134,6 +136,12 @@ class DataManagerController extends Controller implements PermissionProvider
         return Security::getCurrentUser();
     }
 
+    public function IsModal()
+    {
+        // TODO
+        return $this->getRequest()->getVar("modal") ? true : false;
+    }
+
     public function getLogo()
     {
         $logo = self::config()->get('logo');
@@ -153,6 +161,11 @@ class DataManagerController extends Controller implements PermissionProvider
             $this->extend('updateLink', $link, $action);
             return $link;
         }
+    }
+
+    public function CurrentUrl()
+    {
+        return $this->Link(). "?" . $this->CurrentQuery();
     }
 
     public function index(HTTPRequest $request)
@@ -283,11 +296,12 @@ class DataManagerController extends Controller implements PermissionProvider
 
         if ($item->hasMethod("dataManagerFormFields")) {
             $fields = $item->dataManagerFormFields();
-            $fields->push(new HiddenField("ID", "ID"));
         } else {
             $fields = $item->scaffoldFormFields();
-            $fields->push(new HiddenField("ID", "ID"));
         }
+
+        $fields->push(new HiddenField("ID", "ID"));
+        $fields->push(new TextField("BackURL", "BackURL"));
 
         $form = Form::create($this, "EditForm", $fields, new FieldList([
             new FormAction("save", "Speichern"),
@@ -327,10 +341,38 @@ class DataManagerController extends Controller implements PermissionProvider
             $item = $class::get()->byId($id);
             $form->loadDataFrom($item);
         }
+        $form->loadDataFrom([
+            "BackURL" => $request->getVar("BackURL"),
+        ]);
+        if($this->IsModal()) {
+            $this->templates['edit'] = [
+                get_class($this) . '_edit',
+                DataManagerController::class . '_edit',
+                DataManagerController::class . '_modal',
+            ];
+        }
         return [
             "Form" => $form,
             "Title" => singleton($class)->singular_name() . " bearbeiten",
         ];
+    }
+
+    public function duplicate(HTTPRequest $request)
+    {
+        $id = $request->param("ID");
+        $class = $this->getManagedModel();
+        if ($id) {
+            $item = $class::get()->byId($id);
+            // Redirect to add with data as params
+            $data = $item->toMap();
+            unset($data["ID"]);
+            unset($data["Created"]);
+            unset($data["LastEdited"]);
+            unset($data["Segment"]);
+            $data["duplicate"] = 1;
+            $data["BackURL"] = $request->getVar("BackURL");
+            return $this->redirect($this->Link("add") . "?" . http_build_query($data));
+        }
     }
 
     public function delete(HTTPRequest $request)
@@ -348,11 +390,16 @@ class DataManagerController extends Controller implements PermissionProvider
     {
         $form = $this->EditForm();
         if ($id = $this->getRequest()->param("ID")) { //Sub-Object
-//            print_r($this->getRequest()->getVars());
             $form->loadDataFrom($this->getRequest()->getVars()); //Maybe: From GET
         }
+        $form->loadDataFrom($this->getRequest()->getVars());
         $class = $this->getManagedModel();
-        $title = "Neu: " . singleton($class)->singular_name();
+        if($this->getRequest()->getVar("duplicate")) {
+            $title = "Duplizieren: " . singleton($class)->singular_name();
+        } else {
+            $title = "Neu: " . singleton($class)->singular_name();
+        }
+
         if ($this->getRequest()->getVar("Title")) {
             $title = $this->getRequest()->getVar("Title");
         }
@@ -375,8 +422,6 @@ class DataManagerController extends Controller implements PermissionProvider
                 $form->saveInto($item);
                 $item->write();
             }
-
-            return $this->redirect($this->Link());
         } else {
             $item = $class::create();
             if ($form instanceof ModelForm) {
@@ -385,8 +430,9 @@ class DataManagerController extends Controller implements PermissionProvider
                 $form->saveInto($item);
                 $item->write();
             }
-            return $this->redirect($this->Link());
         }
+
+        return $this->redirectBack();
     }
 
     public function getExportFields()
