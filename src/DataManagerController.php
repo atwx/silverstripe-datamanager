@@ -301,7 +301,7 @@ class DataManagerController extends Controller implements PermissionProvider
         }
 
         $fields->push(new HiddenField("ID", "ID"));
-        $fields->push(new TextField("BackURL", "BackURL"));
+        $fields->push(new HiddenField("BackURL", "BackURL"));
 
         $form = Form::create($this, "EditForm", $fields, new FieldList([
             new FormAction("save", "Speichern"),
