@@ -435,6 +435,11 @@ class DataManagerController extends Controller implements PermissionProvider
         return $this->redirectBack();
     }
 
+    public function getExportItems()
+    {
+        return $this->getItems();
+    }
+
     public function getExportFields()
     {
         return singleton($this->getManagedModel())->getDataManagerExportFields();
@@ -446,7 +451,7 @@ class DataManagerController extends Controller implements PermissionProvider
         $sheet = $spreadsheet->getActiveSheet();
         $row = 2;
 
-        $items = $this->getItems();
+        $items = $this->getExportItems();
 
         $fields = $this->getExportFields();
 
