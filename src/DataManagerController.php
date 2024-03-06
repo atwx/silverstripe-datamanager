@@ -437,7 +437,7 @@ class DataManagerController extends Controller implements PermissionProvider
 
     public function getExportItems()
     {
-        return $this->getItems();
+        return $this->getQuery();
     }
 
     public function getExportFields()
@@ -452,7 +452,6 @@ class DataManagerController extends Controller implements PermissionProvider
         $row = 2;
 
         $items = $this->getExportItems();
-
         $fields = $this->getExportFields();
 
         $col = "A";
@@ -463,9 +462,18 @@ class DataManagerController extends Controller implements PermissionProvider
 
         foreach ($items as $item) {
             $col = "A";
-            foreach ($item->getDataManagerExportData() as $data) {
-                $sheet->setCellValue($col . $row, $data);
-                $col++;
+            if ($item->hasMethod("getDataManagerExportData")) {
+                foreach ($item->getDataManagerExportData() as $data) {
+                    $sheet->setCellValue($col . $row, $data);
+                    $col++;
+                }
+            } else {
+                //ArrayData
+                foreach ($fields as $name => $value) {
+                    $value = $item->$name;
+                    $sheet->setCellValue($col . $row, $value);
+                    $col++;
+                }
             }
             $row++;
         }
