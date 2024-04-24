@@ -31,7 +31,7 @@
                         <% end_loop %>
                         <% if $CanEdit %>
                             <td>
-                                <a href="$Top.Link("edit")/$ID"
+                                <a href="$Top.Link("edit")/$ID?BackURL=$Top.Link"
                                    class="uk-icon-button"
                                    title="Bearbeiten"
                                    uk-icon="icon: pencil"></a>

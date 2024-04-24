@@ -64,7 +64,7 @@ trait DataManagerControllerTrait {
             return $logoUrl;
         }
     }
-    
+
     public function index(HTTPRequest $request)
     {
         return [
@@ -78,7 +78,7 @@ trait DataManagerControllerTrait {
         $actions->push(ArrayData::create([
             "Title" => "Neu",
             "Primary" => true,
-            "Link" => $this->Link("add"),
+            "Link" => $this->Link("add") . "?BackUrl=" . $this->Link(),
             "AccessKey" => "n",
         ]));
         $actions->push(ArrayData::create([

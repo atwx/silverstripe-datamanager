@@ -9,6 +9,6 @@
 		<% end_loop %>
 	</div>
 	<% if $RightTitle %><label class="right">$RightTitle</label><% end_if %>
-	<% if $Message %><span class="message $MessageType">$Message</span><% end_if %>
+	<% if $Message %><div class="uk-alert-warning" uk-alert>$Message</div><% end_if %>
 	<% if $Description %><span class="description">$Description</span><% end_if %>
 </div>
