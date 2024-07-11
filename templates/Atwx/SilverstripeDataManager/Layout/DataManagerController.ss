@@ -8,6 +8,8 @@
                 zurücksetzen</a>
             $Items.Count Einträge gefunden
         </p>
+    <% else %>
+        <p>$Items.Count Einträge</p>
     <% end_if %>
     <div class="uk-overflow-auto">
         <table class="uk-table uk-table-striped">
