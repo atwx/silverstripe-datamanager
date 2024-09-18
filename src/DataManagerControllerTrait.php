@@ -14,6 +14,7 @@ use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\PaginatedList;
@@ -78,7 +79,7 @@ trait DataManagerControllerTrait {
         $actions->push(ArrayData::create([
             "Title" => "Neu",
             "Primary" => true,
-            "Link" => $this->Link("add") . "?BackUrl=" . $this->Link(),
+            "Link" => $this->Link("add") . "?BackURL=" . $this->Link(),
             "AccessKey" => "n",
         ]));
         $actions->push(ArrayData::create([
@@ -286,20 +287,24 @@ trait DataManagerControllerTrait {
     public function add()
     {
         $form = $this->EditForm();
-        if ($id = $this->getRequest()->param("ID")) { //Sub-Object
+        $request = $this->getRequest();
+        if ($id = $request->param("ID")) { //Sub-Object
             $form->loadDataFrom($this->getRequest()->getVars()); //Maybe: From GET
         }
         $form->loadDataFrom($this->getRequest()->getVars());
         $class = $this->getManagedModel();
-        if($this->getRequest()->getVar("duplicate")) {
+        if($request->getVar("duplicate")) {
             $title = "Duplizieren: " . singleton($class)->singular_name();
         } else {
             $title = "Neu: " . singleton($class)->singular_name();
         }
 
-        if ($this->getRequest()->getVar("Title")) {
-            $title = $this->getRequest()->getVar("Title");
+        if ($request->getVar("Title")) {
+            $title = $request->getVar("Title");
         }
+        $form->loadDataFrom([
+            "BackURL" => $request->getVar("BackURL"),
+        ]);
         return [
             "Title" => $title,
             "Form" => $form,

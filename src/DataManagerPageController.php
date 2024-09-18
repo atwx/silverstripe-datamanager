@@ -5,6 +5,10 @@ namespace Atwx\SilverstripeDataManager;
 use PageController;
 use SilverStripe\Control\HTTPRequest;
 
+if (!class_exists(PageController::class)) {
+    return;
+}
+
 class DataManagerPageController extends PageController
 {
     use DataManagerControllerTrait;
