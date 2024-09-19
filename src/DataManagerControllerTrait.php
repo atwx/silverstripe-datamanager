@@ -15,6 +15,7 @@ use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\TextField;
+use SilverStripe\i18n\i18n;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\PaginatedList;
@@ -39,6 +40,12 @@ trait DataManagerControllerTrait {
     private static $title = 'DataManagerController';
 
     private static $logo = null;
+
+    public function ContentLocale()
+    {
+        $locale = i18n::get_locale();
+        return i18n::convert_rfc1766($locale);
+    }
 
     public function getBaseUrl()
     {
@@ -77,13 +84,13 @@ trait DataManagerControllerTrait {
     {
         $actions = ArrayList::create();
         $actions->push(ArrayData::create([
-            "Title" => "Neu",
+            "Title" => _t('Atwx\\SilverstripeDataManager.ADD', 'Add'),
             "Primary" => true,
             "Link" => $this->Link("add") . "?BackURL=" . $this->Link(),
             "AccessKey" => "n",
         ]));
         $actions->push(ArrayData::create([
-            "Title" => "Export",
+            "Title" => _t('Atwx\SilverstripeDataManager.EXPORT', 'Export'),
             "Target" => "_blank",
             "Link" => $this->Link("export") . "?" . $this->CurrentQuery(),
         ]));
@@ -154,7 +161,7 @@ trait DataManagerControllerTrait {
         }
         $fields = $model->getDataManagerFilterFields();
         $actions = FieldList::create(
-            FormAction::create("search", "Filtern")
+            FormAction::create("search", _t('Atwx\\SilverstripeDataManager.FILTER', 'Filter'))
                 ->addExtraClass("button--secondary")
         );
         $form = Form::create($this, "FilterForm", $fields, $actions)
@@ -202,8 +209,8 @@ trait DataManagerControllerTrait {
         $fields->push(new HiddenField("BackURL", "BackURL"));
 
         $form = Form::create($this, "EditForm", $fields, new FieldList([
-            new FormAction("save", "Speichern"),
-            new LiteralField('Cancel', '<a href="javascript:history.back();" class="uk-button">Abbrechen</a>'),
+            new FormAction("save", _t('Atwx\\SilverstripeDataManager.SAVE', 'Save')),
+            new LiteralField('Cancel', '<a href="javascript:history.back();" class="uk-button">'._t('Atwx\\SilverstripeDataManager.CANCEL', 'Cancel').'</a>'),
         ]));
 
         // TODO: Validator
@@ -251,7 +258,7 @@ trait DataManagerControllerTrait {
         }
         return [
             "Form" => $form,
-            "Title" => singleton($class)->singular_name() . " bearbeiten",
+            "Title" => singleton($class)->singular_name() . " " . _t('Atwx\SilverstripeDataManager.EDIT', 'Edit'),
         ];
     }
 
