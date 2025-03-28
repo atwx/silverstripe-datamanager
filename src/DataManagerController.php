@@ -51,7 +51,9 @@ class DataManagerController extends Controller implements PermissionProvider
         if ($response->getStatusCode() == 403) {
             // Redirect to login form if permission is denied
             $this->pushCurrent();
-            return Security::permissionFailure($this, "Bitte loggen Sie sich ein.");
+            $response = Security::permissionFailure($this, "Diese Aktion ist nicht erlaubt.");
+            $response->addHeader('Content-Type', 'text/html');
+            return $response;
         }
         return $response;
     }

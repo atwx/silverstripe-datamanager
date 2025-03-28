@@ -27,7 +27,7 @@ trait DataManagerControllerTrait {
     private static $allowed_actions = array(
         "index",
         "EditForm",
-        "edit",
+        "edit" => "->CanEdit",
         "add",
         "view",
         "delete",
