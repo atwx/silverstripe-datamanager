@@ -30,7 +30,7 @@ trait DataManagerControllerTrait {
         "edit" => "->CanEdit",
         "add" => "->CanEdit",
         "view",
-        "delete" => "->CanDelete",
+        "delete" => "->CanEdit",
         "export",
         "duplicate" => "->CanEdit",
     );
@@ -323,12 +323,13 @@ trait DataManagerControllerTrait {
         $class = $this->getManagedModel();
 
         if (isset($data["ID"]) && $data["ID"]) {
-            //Save
             $item = $class::get()->byID($data["ID"]);
-            $form->saveInto($item);
         } else {
             $item = $class::create();
+
         }
+
+        $form->saveInto($item);
 
         if($item->hasMethod("onBeforeDataManagerSave")) {
             $item->onBeforeDataManagerSave($data, $form);
