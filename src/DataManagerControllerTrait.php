@@ -28,11 +28,11 @@ trait DataManagerControllerTrait {
         "index",
         "EditForm",
         "edit" => "->CanEdit",
-        "add",
+        "add" => "->CanEdit",
         "view",
-        "delete",
+        "delete" => "->CanDelete",
         "export",
-        "duplicate",
+        "duplicate" => "->CanEdit",
     );
 
     private static $managed_model = null;
@@ -325,20 +325,19 @@ trait DataManagerControllerTrait {
         if (isset($data["ID"]) && $data["ID"]) {
             //Save
             $item = $class::get()->byID($data["ID"]);
-            if ($form instanceof ModelForm) {
-                $form->save($item);
-            } else {
-                $form->saveInto($item);
-                $item->write();
-            }
+            $form->saveInto($item);
         } else {
             $item = $class::create();
-            if ($form instanceof ModelForm) {
-                $form->save($item);
-            } else {
-                $form->saveInto($item);
-                $item->write();
-            }
+        }
+
+        if($item->hasMethod("onBeforeDataManagerSave")) {
+            $item->onBeforeDataManagerSave($data, $form);
+        }
+
+        $item->write();
+
+        if($item->hasMethod("onAfterDataManagerSave")) {
+            $item->onAfterDataManagerSave($data, $form);
         }
 
         return $this->redirectBack();
@@ -432,4 +431,8 @@ trait DataManagerControllerTrait {
         return $type;
     }
 
+    public function canEdit()
+    {
+        return Permission::check('ADMIN');
+    }
 }
