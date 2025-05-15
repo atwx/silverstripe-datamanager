@@ -258,6 +258,7 @@ trait DataManagerControllerTrait {
         }
         return [
             "Form" => $form,
+            "Item" => $item,
             "Title" => singleton($class)->singular_name() . " " . _t('Atwx\SilverstripeDataManager.EDIT', 'Edit'),
         ];
     }
