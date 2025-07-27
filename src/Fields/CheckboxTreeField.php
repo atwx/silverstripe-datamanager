@@ -3,22 +3,18 @@
 namespace Atwx\SilverstripeDataManager\Fields;
 
 use SilverStripe\Forms\FormField;
-use SilverStripe\Security\Group;
 
 class CheckboxTreeField extends FormField
 {
-    protected $items;
-
     public function __construct(
         $name,
         $title = null,
-        $items = null,
+        protected $items = null,
         $value = null,
         $titleField = 'Title',
         $childrenField = 'Children',
     ) {
         parent::__construct($name, $title, $value);
-        $this->items = $items;
         $this->titleField = $titleField;
     }
 

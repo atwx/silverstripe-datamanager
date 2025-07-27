@@ -18,23 +18,23 @@ class DataManagerController extends Controller implements PermissionProvider
     {
         parent::init();
         $this->templates['index'] = [
-            get_class($this),
+            static::class,
             DataManagerController::class,
             'Page'
         ];
         $this->templates['view'] = [
-            get_class($this) . '_view',
+            static::class . '_view',
             DataManagerController::class . '_view',
             'Page'
         ];
         $this->templates['edit'] = [
-            get_class($this) . '_edit',
+            static::class . '_edit',
             DataManagerController::class . '_edit',
             'Page'
         ];
         $this->templates['add'] = [
-            get_class($this) . '_add',
-            get_class($this) . '_edit',
+            static::class . '_add',
+            static::class . '_edit',
             DataManagerController::class . '_add',
             DataManagerController::class . '_edit',
             'Page'
@@ -75,7 +75,7 @@ class DataManagerController extends Controller implements PermissionProvider
             }
 
             // Remove namespace, only show class name (last element)
-            $parts = explode('\\', $class);
+            $parts = explode('\\', (string) $class);
             $simpleClass = array_pop($parts);
 
             $code = 'DATAMANAGER_ACCESS_' . $simpleClass;

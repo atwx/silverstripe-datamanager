@@ -1,18 +1,10 @@
 <?php
 namespace Atwx\SilverstripeDataManager;
 
+use SilverStripe\Model\List\ArrayList;
+use SilverStripe\Model\ArrayData;
 use SilverStripe\Core\Extension;
-use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\Form;
-use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\Forms\HiddenField;
-use SilverStripe\Forms\RequiredFields;
-use SilverStripe\ORM\ArrayList;
-use SilverStripe\ORM\DataExtension;
-use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBHTMLText;
-use SilverStripe\Security\Permission;
-use SilverStripe\View\ArrayData;
 
 class DataManagerExtension extends Extension
 {

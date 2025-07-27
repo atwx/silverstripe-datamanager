@@ -2,29 +2,25 @@
 
 namespace Atwx\SilverstripeDataManager;
 
+use SilverStripe\Model\List\ArrayList;
+use SilverStripe\Model\ArrayData;
+use SilverStripe\Model\List\PaginatedList;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
-use SilverStripe\Control\HTTPResponse;
-use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\LiteralField;
-use SilverStripe\Forms\TextField;
 use SilverStripe\i18n\i18n;
-use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\PaginatedList;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
-use SilverStripe\View\ArrayData;
 
 trait DataManagerControllerTrait {
-    private static $allowed_actions = array(
+    private static $allowed_actions = [
         "index",
         "EditForm",
         "edit" => "->CanEdit",
@@ -33,7 +29,7 @@ trait DataManagerControllerTrait {
         "delete" => "->CanEdit",
         "export",
         "duplicate" => "->CanEdit",
-    );
+    ];
 
     private static $managed_model = null;
 
@@ -251,7 +247,7 @@ trait DataManagerControllerTrait {
         ]);
         if($this->IsModal()) {
             $this->templates['edit'] = [
-                get_class($this) . '_edit',
+                $this::class . '_edit',
                 DataManagerController::class . '_edit',
                 DataManagerController::class . '_modal',
             ];
@@ -260,6 +256,7 @@ trait DataManagerControllerTrait {
             "Form" => $form,
             "Item" => $item,
             "Title" => singleton($class)->singular_name() . " " . _t('Atwx\SilverstripeDataManager.EDIT', 'Edit'),
+            "Actions" => False,
         ];
     }
 
@@ -316,6 +313,7 @@ trait DataManagerControllerTrait {
         return [
             "Title" => $title,
             "Form" => $form,
+            "Actions" => false,
         ];
     }
 
