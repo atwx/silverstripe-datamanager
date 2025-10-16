@@ -6,10 +6,10 @@
         <p>
             <a href="$Link" class="uk-button uk-button-default uk-button-small" data-behaviour="clear_filter">Filter
                 zurücksetzen</a>
-            $Items.Count Einträge gefunden
+            $Items.TotalItems Einträge gefunden
         </p>
     <% else %>
-        <p>$Items.Count Einträge</p>
+        <p>$Items.TotalItems Einträge</p>
     <% end_if %>
     <div class="uk-overflow-auto">
         <table class="uk-table uk-table-striped">
